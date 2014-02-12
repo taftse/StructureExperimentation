@@ -1,13 +1,9 @@
 <?php namespace Domain\Posts;
 
-use Domain\Observers\Observer;
+use Domain\Core\CreationObserver;
 
-class PostCreator extends Observer;
+class PostCreator;
 {
-    private $successObservers = [];
-    private $failureObservers = [];
-    private $validators = [];
-
     private $posts;
 
     public function __construct(PostRepository $posts)
@@ -15,71 +11,14 @@ class PostCreator extends Observer;
         $this->posts = $posts;
     }
 
-    public function attachCreation(Callable $observer)
-    {
-        $this->successObservers[] = $observer;
-    }
-
-    public function attachFailure(Callable $observer)
-    {
-        $this->failureObservers[] = $observer;
-    }
-
-    public function addValidator($validator)
-    {
-        $this->validators[] = $validator;
-    }
-
-    public function create($postDataArray)
-    {
-        if ( ! $this->runValidators($postDataArray)) {
-            return;
-        }
-
-        $this->createRecord($postDataArray);
-    }
-
-    private function runValidators($postDataArray)
-    {
-        foreach ($this->validators as $validator) {
-            if ( ! $this->validate($validator, $postDataArray)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private function createRecord($postDataArray)
+    public function create(CreationObserver $observer, $postDataArray)
     {
         $post = $this->posts->create($postDataArray);
 
-        if ( ! $post->save()) {
-            $this->fireFailure($post->getErrors());
-            return;
+        if ( ! $this->posts->save($post) {
+            return $observer->onFailure($post->getErrors());
         }
 
-        $this->fireSuccess($post);
-    }
-
-    private function validate($validator, $postDataArray)
-    {
-        if ( ! $validator->validate($postDataArray)) {
-            $this->fireFailure($validator->errors());
-        }
-    }
-
-    private function fireFailure($errors)
-    {
-        foreach ($this->failureObservers as $observer) {
-            call_user_func_array($observer, $errors);
-        }
-    }
-
-    private function fireSuccess($post)
-    {
-        foreach ($this->successObservers as $observer) {
-            call_user_func_array($observer, $post);
-        }
+        return $observer->onSuccess($post);
     }
 }
