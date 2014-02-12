@@ -1,7 +1,5 @@
 <?php namespace Domain\Posts;
 
-use Domain\Core\CreationObserver;
-
 class PostCreator;
 {
     private $posts;
@@ -11,14 +9,14 @@ class PostCreator;
         $this->posts = $posts;
     }
 
-    public function create(CreationObserver $observer, $postDataArray)
+    public function create(PostCreatorObserver $observer, $postDataArray)
     {
         $post = $this->posts->create($postDataArray);
 
         if ( ! $this->posts->save($post) {
-            return $observer->onFailure($post->getErrors());
+            return $observer->onPostCreationFailure($post->getErrors());
         }
 
-        return $observer->onSuccess($post);
+        return $observer->onPostCreationSuccess($post);
     }
 }

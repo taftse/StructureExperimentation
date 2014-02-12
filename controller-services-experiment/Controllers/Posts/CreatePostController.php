@@ -3,8 +3,9 @@
 use Controllers\Controller;
 use Domain\Posts\PostRepository;
 use Domain\Posts\PostForm;
+use Domain\Posts\PostCreatorObserver;
 
-class CreatePostController extends Controller implements CreationObserver
+class CreatePostController extends Controller implements PostCreatorObserver
 {
     private $creator;
     private $redirector;
@@ -27,17 +28,17 @@ class CreatePostController extends Controller implements CreationObserver
     public function postCreate()
     {
         if ( ! $this->form->isValid($request->all())) {
-            return $this->onFailure($this->form->getErrors());
+            return $this->onPostCreationFailure($this->form->getErrors());
         }
         return $this->creator->create($this, $this->input->all());
     }
 
-    public function onFailure($errors)
+    public function onPostCreationFailure($errors)
     {
         return $this->redirector->back()->withInput()->withErrors($errors);
     }
 
-    public function onSuccess($post)
+    public function onPostCreationSuccess($post)
     {
         return $this->redirector->route('posts.show', [$post->id])->with('success', 'Your post has been successfuly created.');
     }
