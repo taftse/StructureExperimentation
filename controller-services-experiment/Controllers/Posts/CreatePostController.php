@@ -1,8 +1,10 @@
 <?php namespace Controllers\Posts;
 
 use Controllers\Controller;
-use Domain\Posts\PostRepository;
 use Domain\Posts\PostForm;
+use Domain\Posts\PostCreator;
+use ...\...\Redirector;
+use ...\...\Request;
 
 class CreatePostController extends Controller implements CreationObserver
 {
