@@ -1,9 +1,11 @@
 <?php namespace Controllers\Posts;
 
 use Controllers\Controller;
-use Domain\Posts\PostRepository;
-use Domain\Posts\PostForm;
 use Domain\Posts\PostCreatorObserver;
+use Domain\Posts\PostCreator;
+use Domain\Posts\PostForm;
+use ...\...\Redirector;
+use ...\...\Request;
 
 class CreatePostController extends Controller implements PostCreatorObserver
 {
@@ -27,7 +29,7 @@ class CreatePostController extends Controller implements PostCreatorObserver
 
     public function postCreate()
     {
-        if ( ! $this->form->isValid($request->all())) {
+        if ( ! $this->form->isValid($this->request->all())) {
             return $this->onPostCreationFailure($this->form->getErrors());
         }
         return $this->creator->create($this, $this->input->all());
