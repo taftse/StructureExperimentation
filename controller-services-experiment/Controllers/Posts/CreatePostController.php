@@ -29,7 +29,7 @@ class CreatePostController extends Controller implements CreationObserver
 
     public function postCreate()
     {
-        if ( ! $this->form->isValid($request->all())) {
+        if ( ! $this->form->isValid($this->request->all())) {
             return $this->onFailure($this->form->getErrors());
         }
         return $this->creator->create($this, $this->input->all());
