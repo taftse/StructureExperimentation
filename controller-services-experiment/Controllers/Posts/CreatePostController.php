@@ -3,6 +3,7 @@
 use Controllers\Controller;
 use Domain\Posts\PostForm;
 use Domain\Posts\PostCreator;
+use Domain\Core\CreationObserver;
 use ...\...\Redirector;
 use ...\...\Request;
 
