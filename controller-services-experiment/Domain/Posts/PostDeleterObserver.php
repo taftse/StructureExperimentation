@@ -2,5 +2,5 @@
 
 interface PostDeleterObserver
 {
-    public function onPostDeletionSuccess($post);
+    public function onPostDeleteSuccess($post);
 }

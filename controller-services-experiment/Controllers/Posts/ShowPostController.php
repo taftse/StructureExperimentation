@@ -14,6 +14,7 @@ class ShowPostController extends Controller
 
     public function getShow($id)
     {
-        //
+        $post = $this->posts->requireById($id);
+        $this->view('posts.show', compact('post'));
     }
 }

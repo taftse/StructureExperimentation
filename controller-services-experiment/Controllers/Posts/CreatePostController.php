@@ -24,23 +24,23 @@ class CreatePostController extends Controller implements PostCreatorObserver
 
     public function getCreate()
     {
-        $this->view('post.create');
+        $this->view('posts.create');
     }
 
     public function postCreate()
     {
         if ( ! $this->form->isValid($this->request->all())) {
-            return $this->onPostCreationFailure($this->form->getErrors());
+            return $this->onPostCreateFailure($this->form->getErrors());
         }
         return $this->creator->create($this, $this->input->all());
     }
 
-    public function onPostCreationFailure($errors)
+    public function onPostCreateFailure($errors)
     {
         return $this->redirector->back()->withInput()->withErrors($errors);
     }
 
-    public function onPostCreationSuccess($post)
+    public function onPostCreateSuccess($post)
     {
         return $this->redirector->route('posts.show', [$post->id])->with('success', 'Your post has been successfuly created.');
     }

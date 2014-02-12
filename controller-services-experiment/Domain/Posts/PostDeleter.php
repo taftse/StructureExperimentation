@@ -12,6 +12,6 @@ class PostDeleter
     public function delete(PostDeleterObserver $observer, Post $post)
     {
         $post->delete();
-        $observer->onPostDeletionSuccess($post);
+        $observer->onPostDeleteSuccess($post);
     }
 }
