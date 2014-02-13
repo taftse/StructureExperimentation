@@ -1,6 +1,8 @@
 <?php namespace Domain\Core;
 
-class Entity
+use Illuminate\Database\Eloquent\Model;
+
+class Entity extends Model
 {
     protected $validationRules = [];
 

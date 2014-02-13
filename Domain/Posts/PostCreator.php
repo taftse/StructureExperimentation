@@ -12,11 +12,9 @@ class PostCreator;
     public function create(PostCreatorObserver $observer, array $data)
     {
         $post = $this->posts->create($data);
-
-        if ( ! $this->posts->save($post) {
+        if ( ! $this->posts->save($post)) {
             return $observer->onPostCreateFailure($post->getErrors());
         }
-
         return $observer->onPostCreateSuccess($post);
     }
 }

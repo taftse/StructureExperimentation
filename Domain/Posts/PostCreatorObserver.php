@@ -3,5 +3,5 @@
 interface PostCreatorObserver
 {
     public function onPostCreateFailure($errors);
-    public function onPostCreateSuccess($model);
+    public function onPostCreateSuccess($post);
 }

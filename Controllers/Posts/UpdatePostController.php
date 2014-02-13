@@ -22,7 +22,7 @@ class UpdatePostController extends Controller implements PostUpdaterObserver
         $this->form = $form;
     }
 
-    public function getUpdate($postId)
+    public function getUpdate($id)
     {
         $post = $this->posts->requireById($id);
         $this->view('posts.update', compact('post'));
