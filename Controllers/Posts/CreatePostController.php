@@ -4,6 +4,7 @@ use Controllers\Controller;
 use Domain\Posts\PostCreatorObserver;
 use Domain\Posts\PostCreator;
 use Domain\Posts\PostForm;
+use Domain\Posts\Post;
 use ...\...\Redirector;
 use ...\...\Request;
 
@@ -16,10 +17,12 @@ class CreatePostController extends Controller implements PostCreatorObserver
 
     public function __construct(PostCreator $creator, PostForm $form, Redirector $redirector, Request $request)
     {
-        $this->creator = $creator->setObserver($this);
         $this->redirector = $redirector;
         $this->request = $request;
         $this->form = $form;
+
+        $creator->setObserver($this);
+        $this->creator = $creator;
     }
 
     public function getCreate()
@@ -40,7 +43,7 @@ class CreatePostController extends Controller implements PostCreatorObserver
         return $this->redirector->back()->withInput()->withErrors($errors);
     }
 
-    public function onPostCreateSuccess($post)
+    public function onPostCreateSuccess(Post $post)
     {
         return $this->redirector->route('posts.show', [$post->id])->with('success', 'Your post has been successfuly created.');
     }

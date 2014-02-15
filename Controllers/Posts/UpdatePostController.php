@@ -4,6 +4,7 @@ use Controllers\Controller;
 use Domain\Posts\PostUpdaterObserver;
 use Domain\Posts\PostUpdater;
 use Domain\Posts\PostForm;
+use Domain\Posts\Post;
 use ...\...\Redirector;
 use ...\...\Request;
 
@@ -16,10 +17,12 @@ class UpdatePostController extends Controller implements PostUpdaterObserver
 
     public function __construct(PostUpdater $updater, PostForm $form, Redirector $redirector, Request $request)
     {
-        $this->updater = $updater;
         $this->redirector = $redirector;
         $this->request = $request;
         $this->form = $form;
+
+        $updater->setObserver($this);
+        $this->updater = $updater;
     }
 
     public function getUpdate($id)
@@ -34,7 +37,7 @@ class UpdatePostController extends Controller implements PostUpdaterObserver
         if ( ! $this->form->isValid($this->request->all())) {
             return $this->onPostUpdateFailure($this->form->getErrors());
         }
-        return $this->updater->update($this, $post, $this->input->all());
+        return $this->updater->update($post, $this->input->all());
     }
 
     public function onPostUpdateFailure($errors)
@@ -42,7 +45,7 @@ class UpdatePostController extends Controller implements PostUpdaterObserver
         return $this->redirector->back()->withInput()->withErrors($errors);
     }
 
-    public function onPostUpdateSuccess($post)
+    public function onPostUpdateSuccess(Post $post)
     {
         return $this->redirector->route('posts.show', [$post->id])->with('success', 'Your post has been successfuly updated.');
     }

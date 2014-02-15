@@ -4,6 +4,7 @@ use Controllers\Controller;
 use Domain\Posts\PostRepository;
 use Domain\Posts\PostDeleter;
 use Domain\Posts\PostDeleterObserver;
+use Domain\Posts\Post;
 use ...\...\Redirector;
 
 class DeletePostController extends Controller implements PostDeleterObserver
@@ -15,8 +16,10 @@ class DeletePostController extends Controller implements PostDeleterObserver
     public function __construct(PostRepository $posts, PostDeleter $deleter, Redirector $redirector)
     {
         $this->posts = $posts;
-        $this->deleter = $deleter;
         $this->redirector = $redirector;
+
+        $deleter->setObserver($this);
+        $this->deleter = $deleter;
     }
 
     public function getDelete($id)
@@ -28,10 +31,10 @@ class DeletePostController extends Controller implements PostDeleterObserver
     public function postDelete($id)
     {
         $post = $this->posts->requireById($id);
-        return $this->deleter->delete($this, $post);
+        return $this->deleter->delete($post);
     }
 
-    public function onPostDeleteSuccess($post)
+    public function onPostDeleteSuccess(Post $post)
     {
         return $this->redirector->route('posts.index')->with('success', 'You have successfully deleted the post.');
     }

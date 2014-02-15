@@ -10,17 +10,31 @@ class PostCreator
         $this->posts = $posts;
     }
 
-    public function setObserver(PostCreatorObserver $observer) {
+    public function setObserver(PostCreatorObserver $observer)
+    {
         $this->observer = $observer;
-        return $this;
     }
 
     public function create(array $data)
     {
         $post = $this->posts->create($data);
         if ( ! $this->posts->save($post)) {
-            return $this->observer->onPostCreateFailure($post->getErrors());
+            return $this->failure($post->getErrors());
         }
-        return $this->observer->onPostCreateSuccess($post);
+        return $this->success($post);
+    }
+
+    private function failure($errors)
+    {
+        if ($this->observer) {
+            return $this->observer->onPostCreateFailure($errors);
+        }
+    }
+
+    private function success(Post $post)
+    {
+        if ($this->observer) {
+            return $this->observer->onPostCreateSuccess($post);
+        }
     }
 }

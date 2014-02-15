@@ -3,15 +3,28 @@
 class PostDeleter
 {
     private $posts;
+    private $observer;
 
     public function __construct(PostRepository $posts)
     {
         $this->posts = $posts;
     }
 
-    public function delete(PostDeleterObserver $observer, Post $post)
+    public function setObserver(PostDeleterObserver $observer)
+    {
+        $this->observer = $observer;
+    }
+
+    public function delete(Post $post)
     {
         $post->delete();
-        $observer->onPostDeleteSuccess($post);
+        return $this->success($post);
+    }
+
+    private function success(Post $post)
+    {
+        if ($this->observer) {
+            return $this->observer->onPostDeleteSuccess($post);
+        }
     }
 }
