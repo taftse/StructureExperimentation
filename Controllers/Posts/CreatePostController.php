@@ -16,7 +16,7 @@ class CreatePostController extends Controller implements PostCreatorObserver
 
     public function __construct(PostCreator $creator, PostForm $form, Redirector $redirector, Request $request)
     {
-        $this->creator = $creator;
+        $this->creator = $creator->setObserver($this);
         $this->redirector = $redirector;
         $this->request = $request;
         $this->form = $form;
@@ -32,7 +32,7 @@ class CreatePostController extends Controller implements PostCreatorObserver
         if ( ! $this->form->isValid($this->request->all())) {
             return $this->onPostCreateFailure($this->form->getErrors());
         }
-        return $this->creator->create($this, $this->input->all());
+        return $this->creator->create($this->input->all());
     }
 
     public function onPostCreateFailure($errors)
