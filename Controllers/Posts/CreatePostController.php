@@ -45,6 +45,6 @@ class CreatePostController extends Controller implements PostCreatorObserver
 
     public function onPostCreateSuccess(Post $post)
     {
-        return $this->redirector->route('posts.show', [$post->id])->with('success', 'Your post has been successfuly created.');
+        return $this->redirector->route('posts.show', [$post->id])->with('success', 'Your post has been successfully created.');
     }
 }
