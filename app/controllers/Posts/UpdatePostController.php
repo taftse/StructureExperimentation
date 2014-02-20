@@ -35,7 +35,7 @@ class UpdatePostController extends Controller implements PostUpdaterResponder
         if ( ! $this->form->isValid($this->request->all())) {
             return $this->onPostUpdateFailure($this->form->getErrors());
         }
-        return $this->updater->responseWith($this)->update($post, $this->input->all());
+        return $this->updater->respondsWith($this)->update($post, $this->input->all());
     }
 
     public function onPostUpdateFailure($errors)

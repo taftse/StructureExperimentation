@@ -10,7 +10,7 @@ class PostUpdater;
         $this->posts = $posts;
     }
 
-    public function responseWith(PostUpdaterResponder $responder)
+    public function respondsWith(PostUpdaterResponder $responder)
     {
         $this->responder = $responder;
         return $this;

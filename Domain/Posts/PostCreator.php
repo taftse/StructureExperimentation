@@ -10,7 +10,7 @@ class PostCreator
         $this->posts = $posts;
     }
 
-    public function responseWith(PostCreatorResponder $responder)
+    public function respondsWith(PostCreatorResponder $responder)
     {
         $this->responder = $responder;
         return $this;

@@ -4,4 +4,4 @@ Application Structure Experimentation
 
 ## 1.1
 
-- name responders as ResponseHandlers
+- create 'responders' name

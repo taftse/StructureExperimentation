@@ -10,7 +10,7 @@ class PostDeleter
         $this->posts = $posts;
     }
 
-    public function responseWith(PostDeleterResponder $responder)
+    public function respondsWith(PostDeleterResponder $responder)
     {
         $this->responder = $responder;
         return $this;

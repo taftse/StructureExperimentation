@@ -29,7 +29,7 @@ class DeletePostController extends Controller implements PostDeleterResponder
     public function postDelete($id)
     {
         $post = $this->posts->requireById($id);
-        return $this->deleter->responseWith($this)->delete($post);
+        return $this->deleter->respondsWith($this)->delete($post);
     }
 
     public function onPostDeleteSuccess(Post $post)

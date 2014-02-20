@@ -33,7 +33,7 @@ class CreatePostController extends Controller implements PostCreatorResponder
         if ( ! $this->form->isValid($this->request->all())) {
             return $this->onPostCreateFailure($this->form->getErrors());
         }
-        return $this->creator->responseWith($this)->create($this->input->all());
+        return $this->creator->respondsWith($this)->create($this->input->all());
     }
 
     public function onPostCreateFailure($errors)
