@@ -1,6 +1,6 @@
 <?php namespace Domain\Posts;
 
-interface PostCreatorObserver
+interface PostCreatorResponder
 {
     public function onPostCreateFailure($errors);
     public function onPostCreateSuccess($post);

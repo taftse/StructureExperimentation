@@ -3,16 +3,17 @@
 class PostUpdater;
 {
     private $posts;
-    private $observer;
+    private $responder;
 
     public function __construct(PostRepository $posts)
     {
         $this->posts = $posts;
     }
 
-    public function setObserver(PostUpdaterObserver $observer)
+    public function responseWith(PostUpdaterResponder $responder)
     {
-        $this->observer = $observer;
+        $this->responder = $responder;
+        return $this;
     }
 
     public function update(Post $post, array $data)
@@ -26,15 +27,15 @@ class PostUpdater;
 
     private function failure($errors)
     {
-        if ($this->observer) {
-            return $this->observer->onPostUpdateFailure($errors);
+        if ($this->responder) {
+            return $this->responder->onPostUpdateFailure($errors);
         }
     }
 
     private function success(Post $post)
     {
-        if ($this->observer) {
-            return $this->observer->onPostUpdateSuccess($post);
+        if ($this->responder) {
+            return $this->responder->onPostUpdateSuccess($post);
         }
     }
 }

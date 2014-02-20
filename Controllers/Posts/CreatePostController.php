@@ -1,14 +1,14 @@
 <?php namespace Controllers\Posts;
 
 use Controllers\Controller;
-use Domain\Posts\PostCreatorObserver;
+use Domain\Posts\PostCreatorResponder;
 use Domain\Posts\PostCreator;
 use Domain\Posts\PostForm;
 use Domain\Posts\Post;
 use ...\...\Redirector;
 use ...\...\Request;
 
-class CreatePostController extends Controller implements PostCreatorObserver
+class CreatePostController extends Controller implements PostCreatorResponder
 {
     private $creator;
     private $redirector;
@@ -17,12 +17,10 @@ class CreatePostController extends Controller implements PostCreatorObserver
 
     public function __construct(PostCreator $creator, PostForm $form, Redirector $redirector, Request $request)
     {
+        $this->creator = $creator;
+        $this->form = $form;
         $this->redirector = $redirector;
         $this->request = $request;
-        $this->form = $form;
-
-        $creator->setObserver($this);
-        $this->creator = $creator;
     }
 
     public function getCreate()
@@ -35,7 +33,7 @@ class CreatePostController extends Controller implements PostCreatorObserver
         if ( ! $this->form->isValid($this->request->all())) {
             return $this->onPostCreateFailure($this->form->getErrors());
         }
-        return $this->creator->create($this->input->all());
+        return $this->creator->responseWith($this)->create($this->input->all());
     }
 
     public function onPostCreateFailure($errors)

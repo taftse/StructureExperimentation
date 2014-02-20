@@ -3,16 +3,17 @@
 class PostCreator
 {
     private $posts;
-    private $observer;
+    private $responder;
 
     public function __construct(PostRepository $posts)
     {
         $this->posts = $posts;
     }
 
-    public function setObserver(PostCreatorObserver $observer)
+    public function responseWith(PostCreatorResponder $responder)
     {
-        $this->observer = $observer;
+        $this->responder = $responder;
+        return $this;
     }
 
     public function create(array $data)
@@ -26,15 +27,15 @@ class PostCreator
 
     private function failure($errors)
     {
-        if ($this->observer) {
-            return $this->observer->onPostCreateFailure($errors);
+        if ($this->responder) {
+            return $this->responder->onPostCreateFailure($errors);
         }
     }
 
     private function success(Post $post)
     {
-        if ($this->observer) {
-            return $this->observer->onPostCreateSuccess($post);
+        if ($this->responder) {
+            return $this->responder->onPostCreateSuccess($post);
         }
     }
 }

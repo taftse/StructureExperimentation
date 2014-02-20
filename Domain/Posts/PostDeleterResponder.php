@@ -1,6 +1,6 @@
 <?php namespace Domain\Posts;
 
-interface PostDeleterObserver
+interface PostDeleterResponder
 {
     public function onPostDeleteSuccess($post);
 }
