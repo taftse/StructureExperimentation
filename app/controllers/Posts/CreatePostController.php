@@ -12,15 +12,15 @@ class CreatePostController extends Controller implements PostCreatorResponder
 {
     private $creator;
     private $redirector;
-    private $request;
+    private $input;
     private $form;
 
-    public function __construct(PostCreator $creator, PostForm $form, Redirector $redirector, Request $request)
+    public function __construct(PostCreator $creator, PostForm $form, Redirector $redirector, Request $input)
     {
         $this->creator = $creator;
         $this->form = $form;
         $this->redirector = $redirector;
-        $this->request = $request;
+        $this->input = $input;
     }
 
     public function getCreate()
@@ -30,7 +30,7 @@ class CreatePostController extends Controller implements PostCreatorResponder
 
     public function postCreate()
     {
-        if ( ! $this->form->isValid($this->request->all())) {
+        if ( ! $this->form->isValid($this->input->all())) {
             return $this->onPostCreateFailure($this->form->getErrors());
         }
         return $this->creator->respondsWith($this)->create($this->input->all());
